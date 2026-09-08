@@ -1,0 +1,10 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844">
+  <rect width="390" height="844" fill="#070913"/>
+  <text x="195" y="240" font-family="sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">ANTI-GRAVITY</text>
+  <text x="195" y="275" font-family="sans-serif" font-size="32" font-weight="900" fill="#00f3ff" text-anchor="middle">PIANO</text>
+  <rect x="45" y="340" width="300" height="100" rx="14" fill="#171b36" stroke="#2a325d"/>
+  <text x="195" y="380" font-family="sans-serif" font-size="12" fill="#8e9aaf" text-anchor="middle">CLASSIC HIGH SCORE</text>
+  <text x="195" y="415" font-family="sans-serif" font-size="26" font-weight="bold" fill="#00f3ff" text-anchor="middle">14,250</text>
+  <rect x="45" y="480" width="300" height="54" rx="12" fill="#0e1227" stroke="#00f3ff" stroke-width="2"/>
+  <text x="195" y="514" font-family="sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">PLAY CLASSIC</text>
+</svg>

@@ -1,0 +1,29 @@
+﻿{
+  "expo": {
+    "name": "Anti-Gravity Piano",
+    "slug": "anti-gravity-piano",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons/icon.svg",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/icons/icon.svg",
+      "resizeMode": "contain",
+      "backgroundColor": "#070913"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.antigravity.piano"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/icon.svg",
+        "backgroundColor": "#070913"
+      },
+      "package": "com.antigravity.piano"
+    },
+    "web": {
+      "favicon": "./assets/icons/favicon.svg"
+    }
+  }
+}

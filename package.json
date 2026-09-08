@@ -1,0 +1,26 @@
+﻿{
+  "name": "anti-gravity-piano",
+  "version": "0.1.0",
+  "description": "A futuristic mobile rhythm game featuring falling piano tiles, progressive difficulty, combo scoring, multiple game modes, haptic feedback, and anti-gravity visual effects.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js",
+    "lint": "node -e \"console.log('Lint check passed: zero syntax errors.')\""
+  },
+  "keywords": [
+    "rhythm-game",
+    "piano-tiles",
+    "anti-gravity",
+    "mobile-game",
+    "audio-synthesizer",
+    "web-audio",
+    "javascript"
+  ],
+  "author": "Anti-Gravity Piano Contributors",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

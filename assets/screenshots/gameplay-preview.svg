@@ -1,0 +1,13 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844">
+  <rect width="390" height="844" fill="#070913"/>
+  <line x1="97.5" y1="0" x2="97.5" y2="844" stroke="rgba(255,255,255,0.08)"/>
+  <line x1="195" y1="0" x2="195" y2="844" stroke="rgba(255,255,255,0.08)"/>
+  <line x1="292.5" y1="0" x2="292.5" y2="844" stroke="rgba(255,255,255,0.08)"/>
+  <line x1="0" y1="692" x2="390" y2="692" stroke="#00f3ff" stroke-width="3"/>
+  <rect x="4" y="240" width="89.5" height="130" rx="8" fill="#00f3ff"/>
+  <rect x="101.5" y="460" width="89.5" height="130" rx="8" fill="#ff007f"/>
+  <rect x="199" y="80" width="89.5" height="130" rx="8" fill="#8b5cf6"/>
+  <rect x="296.5" y="590" width="89.5" height="130" rx="8" fill="#ffe600"/>
+  <text x="20" y="50" font-family="sans-serif" font-size="28" font-weight="bold" fill="#ffffff">3,450</text>
+  <text x="20" y="78" font-family="sans-serif" font-size="16" font-weight="bold" fill="#ff007f">18x COMBO (1.5x)</text>
+</svg>

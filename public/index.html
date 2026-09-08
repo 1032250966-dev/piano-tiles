@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Anti-Gravity Piano</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    body {
+      background-color: #05070e;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    #game-container {
+      position: relative;
+      width: 100vw;
+      max-width: 440px;
+      height: 100vh;
+      max-height: 920px;
+      background: radial-gradient(circle at center, #0e1227 0%, #060814 100%);
+      box-shadow: 0 0 40px rgba(0, 243, 255, 0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .screen-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 9, 19, 0.92);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+      z-index: 20;
+    }
+    .hidden { display: none !important; }
+    h1.title {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(0, 243, 255, 0.7);
+    }
+    .cyan-text { color: #00f3ff; }
+    .magenta-text { color: #ff007f; }
+    .yellow-text { color: #ffe600; }
+    .green-text { color: #00ff88; }
+    .red-text { color: #ff3344; }
+    .subtitle {
+      font-size: 13px;
+      color: #8e9aaf;
+      letter-spacing: 3px;
+      margin-bottom: 36px;
+    }
+    .neon-button {
+      width: 100%;
+      max-width: 280px;
+      padding: 16px 20px;
+      margin: 8px 0;
+      border-radius: 12px;
+      border: 2px solid #00f3ff;
+      background: rgba(14, 18, 39, 0.85);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(0, 243, 255, 0.35);
+      transition: all 0.2s ease;
+    }
+    .neon-button:active {
+      transform: scale(0.97);
+      background: #00f3ff;
+      color: #070913;
+    }
+    .btn-secondary {
+      border-color: #ff007f;
+      box-shadow: 0 0 16px rgba(255, 0, 127, 0.35);
+    }
+    .btn-secondary:active {
+      background: #ff007f;
+      color: #ffffff;
+    }
+    .stats-card {
+      width: 100%;
+      max-width: 280px;
+      background: rgba(23, 27, 54, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .stat-box { display: flex; flex-direction: column; }
+    .stat-label { font-size: 11px; color: #8e9aaf; text-transform: uppercase; }
+    .stat-val { font-size: 20px; font-weight: bold; margin-top: 4px; }
+    .btn-pause {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(7, 9, 19, 0.6);
+      color: #ffffff;
+      font-size: 16px;
+      z-index: 10;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+    .mode-card {
+      width: 100%;
+      max-width: 300px;
+      background: rgba(23, 27, 54, 0.85);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 8px 0;
+      text-align: left;
+      cursor: pointer;
+    }
+    .mode-card h3 { font-size: 16px; margin-bottom: 4px; }
+    .mode-card p { font-size: 12px; color: #8e9aaf; line-height: 1.4; }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="canvas"></canvas>
+    <button id="btn-pause" class="btn-pause hidden">❚❚</button>
+
+    <!-- Start / Home Screen -->
+    <div id="screen-home" class="screen-overlay">
+      <h1 class="title">ANTI-GRAVITY<br><span class="cyan-text">PIANO</span></h1>
+      <p class="subtitle">QUANTUM HARMONICS</p>
+
+      <div class="stats-card">
+        <div class="stat-box">
+          <span class="stat-label">Best Classic</span>
+          <span id="best-classic" class="stat-val cyan-text">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Time Attack</span>
+          <span id="best-timeattack" class="stat-val magenta-text">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Best Combo</span>
+          <span id="best-combo" class="stat-val yellow-text">0x</span>
+        </div>
+      </div>
+
+      <button id="btn-play-classic" class="neon-button">PLAY CLASSIC</button>
+      <button id="btn-open-modes" class="neon-button btn-secondary">SELECT MODE</button>
+    </div>
+
+    <!-- Mode Select Screen -->
+    <div id="screen-modes" class="screen-overlay hidden">
+      <h2 style="margin-bottom: 20px;">CHOOSE FLIGHT MODE</h2>
+      <div class="mode-card" data-mode="CLASSIC">
+        <h3 class="cyan-text">Classic Endurance</h3>
+        <p>Survive 100 tiles as gravity intensifies. Speed scales progressively. 1 miss = crash!</p>
+      </div>
+      <div class="mode-card" data-mode="TIME_ATTACK">
+        <h3 class="magenta-text">Time Attack (45s)</h3>
+        <p>45-second sprint! Maximize score and combo streak before the quantum clock expires.</p>
+      </div>
+      <div class="mode-card" data-mode="ZEN">
+        <h3 class="yellow-text">Zen Float</h3>
+        <p>Zero stress, zero death. Endless relaxing piano drift to practice melodies.</p>
+      </div>
+      <button id="btn-back-home" class="neon-button" style="margin-top: 20px; border-color: #8e9aaf;">BACK</button>
+    </div>
+
+    <!-- Pause Screen -->
+    <div id="screen-pause" class="screen-overlay hidden">
+      <h2 class="cyan-text" style="margin-bottom: 24px;">FLIGHT SUSPENDED</h2>
+      <button id="btn-resume" class="neon-button">RESUME</button>
+      <button id="btn-restart" class="neon-button btn-secondary">RESTART</button>
+      <button id="btn-mute" class="neon-button" style="border-color: #ffe600;">MUTE AUDIO</button>
+      <button id="btn-quit" class="neon-button" style="border-color: #8e9aaf;">MAIN MENU</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="screen-gameover" class="screen-overlay hidden">
+      <h1 id="gameover-title" class="red-text" style="font-size: 28px; margin-bottom: 8px;">GRAVITY COLLAPSE</h1>
+      <p id="new-record-banner" class="yellow-text hidden" style="font-weight: bold; margin-bottom: 16px;">★ NEW HIGH SCORE RECORD! ★</p>
+
+      <div class="stats-card" style="flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between;">
+          <span class="stat-label">Final Score:</span>
+          <span id="final-score" class="cyan-text" style="font-weight: bold; font-size: 22px;">0</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span class="stat-label">Max Combo:</span>
+          <span id="final-combo" class="magenta-text" style="font-weight: bold; font-size: 18px;">0x</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span class="stat-label">Tiles Hit:</span>
+          <span id="final-tiles" class="white-text" style="font-weight: bold; font-size: 18px;">0</span>
+        </div>
+      </div>
+
+      <button id="btn-play-again" class="neon-button">PLAY AGAIN</button>
+      <button id="btn-gameover-menu" class="neon-button btn-secondary">MAIN MENU</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      DimensionsHelper,
+      AudioManager,
+      HapticsHelper,
+      ScoreRepository,
+      GameEngine,
+      ParticleSystem,
+      ComboPopup,
+      Starfield,
+      TileView,
+      ColumnView,
+      ScoreHUD,
+      GAME_MODES,
+      GAME_STATES,
+      THEME_COLORS
+    } from '../src/index.js';
+
+    const container = document.getElementById('game-container');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      if (window.app && window.app.dim) window.app.dim.updateDimensions(canvas.width, canvas.height);
+    }
+    window.addEventListener('resize', resize);
+
+    class BrowserApp {
+      constructor() {
+        this.dim = new DimensionsHelper(canvas.width || 390, canvas.height || 844);
+        this.audio = new AudioManager();
+        this.haptics = new HapticsHelper();
+        this.scoreRepo = new ScoreRepository();
+
+        this.particles = new ParticleSystem(canvas.width || 390, canvas.height || 844);
+        this.comboPopup = new ComboPopup();
+        this.starfield = new Starfield(canvas.width || 390, canvas.height || 844);
+
+        this.currentScoreData = { score: 0, combo: 0, multiplier: 1.0, tilesHit: 0, timeRemaining: 0 };
+        this.activeMode = GAME_MODES.CLASSIC;
+
+        this.engine = new GameEngine({
+          dimensionsHelper: this.dim,
+          audioManager: this.audio,
+          hapticsHelper: this.haptics,
+          onStateChange: (st) => this.onStateChange(st),
+          onScoreUpdate: (sd) => { this.currentScoreData = sd; },
+          onTileHit: (h) => this.onTileHit(h),
+          onGameOver: (r) => this.onGameOver(r)
+        });
+
+        this.bindEvents();
+        this.refreshHighScores();
+        this.loop = this.loop.bind(this);
+        requestAnimationFrame(this.loop);
+      }
+
+      async refreshHighScores() {
+        const stats = await this.scoreRepo.getHighScores();
+        document.getElementById('best-classic').innerText = stats.CLASSIC || 0;
+        document.getElementById('best-timeattack').innerText = stats.TIME_ATTACK || 0;
+        document.getElementById('best-combo').innerText = (stats.highestCombo || 0) + 'x';
+      }
+
+      bindEvents() {
+        const handleTouch = (e) => {
+          e.preventDefault();
+          if (this.engine.state !== GAME_STATES.PLAYING) return;
+          const rect = canvas.getBoundingClientRect();
+          const touches = e.changedTouches ? Array.from(e.changedTouches) : [e];
+          for (const t of touches) {
+            const clientX = t.clientX - rect.left;
+            const clientY = t.clientY - rect.top;
+            this.engine.handleTap(clientX, clientY);
+          }
+        };
+
+        canvas.addEventListener('pointerdown', handleTouch, { passive: false });
+
+        document.getElementById('btn-play-classic').onclick = () => {
+          this.startGame(GAME_MODES.CLASSIC);
+        };
+        document.getElementById('btn-open-modes').onclick = () => {
+          document.getElementById('screen-home').classList.add('hidden');
+          document.getElementById('screen-modes').classList.remove('hidden');
+        };
+        document.getElementById('btn-back-home').onclick = () => {
+          document.getElementById('screen-modes').classList.add('hidden');
+          document.getElementById('screen-home').classList.remove('hidden');
+        };
+
+        document.querySelectorAll('.mode-card').forEach(card => {
+          card.onclick = () => {
+            const mode = card.dataset.mode;
+            document.getElementById('screen-modes').classList.add('hidden');
+            this.startGame(mode);
+          };
+        });
+
+        document.getElementById('btn-pause').onclick = () => {
+          this.engine.pause();
+          document.getElementById('screen-pause').classList.remove('hidden');
+        };
+        document.getElementById('btn-resume').onclick = () => {
+          document.getElementById('screen-pause').classList.add('hidden');
+          this.engine.resume();
+        };
+        document.getElementById('btn-restart').onclick = () => {
+          document.getElementById('screen-pause').classList.add('hidden');
+          this.startGame(this.activeMode);
+        };
+        document.getElementById('btn-mute').onclick = () => {
+          const isMuted = this.audio.toggleMute();
+          document.getElementById('btn-mute').innerText = isMuted ? 'UNMUTE AUDIO' : 'MUTE AUDIO';
+        };
+        document.getElementById('btn-quit').onclick = () => {
+          document.getElementById('screen-pause').classList.add('hidden');
+          document.getElementById('btn-pause').classList.add('hidden');
+          document.getElementById('screen-home').classList.remove('hidden');
+          this.engine.state = GAME_STATES.IDLE;
+          this.refreshHighScores();
+        };
+
+        document.getElementById('btn-play-again').onclick = () => {
+          document.getElementById('screen-gameover').classList.add('hidden');
+          this.startGame(this.activeMode);
+        };
+        document.getElementById('btn-gameover-menu').onclick = () => {
+          document.getElementById('screen-gameover').classList.add('hidden');
+          document.getElementById('btn-pause').classList.add('hidden');
+          document.getElementById('screen-home').classList.remove('hidden');
+          this.refreshHighScores();
+        };
+      }
+
+      startGame(mode) {
+        this.activeMode = mode;
+        document.getElementById('screen-home').classList.add('hidden');
+        document.getElementById('screen-modes').classList.add('hidden');
+        document.getElementById('screen-gameover').classList.add('hidden');
+        document.getElementById('btn-pause').classList.remove('hidden');
+
+        this.particles = new ParticleSystem(canvas.width, canvas.height);
+        this.comboPopup = new ComboPopup();
+        this.engine.start(mode);
+      }
+
+      onStateChange(st) {}
+
+      onTileHit({ tile, rating, points }) {
+        const cx = tile.x + (tile.width / 2);
+        const cy = tile.y + (tile.height / 2);
+        this.particles.emitBurst(cx, cy, tile.color, 20);
+        this.comboPopup.add(rating + ' +' + points, cx, cy - 20, tile.color);
+      }
+
+      async onGameOver(result) {
+        document.getElementById('btn-pause').classList.add('hidden');
+        const { stats, isNewHighScore } = await this.scoreRepo.recordGameResult(result);
+        
+        document.getElementById('gameover-title').innerText = result.reason === 'VICTORY' ? 'QUANTUM VICTORY!' : 'GRAVITY COLLAPSE';
+        document.getElementById('gameover-title').className = result.reason === 'VICTORY' ? 'green-text' : 'red-text';
+        document.getElementById('new-record-banner').classList.toggle('hidden', !isNewHighScore);
+        document.getElementById('final-score').innerText = result.score;
+        document.getElementById('final-combo').innerText = result.maxCombo + 'x';
+        document.getElementById('final-tiles').innerText = result.tilesHit;
+        
+        document.getElementById('screen-gameover').classList.remove('hidden');
+      }
+
+      loop(now) {
+        this.engine.tick(now);
+        const dt = 1 / 60;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        this.starfield.update(dt, canvas.height);
+        this.starfield.render(ctx);
+
+        ColumnView.render(ctx, canvas.width, canvas.height, this.dim.targetHitLineY);
+
+        for (const tile of this.engine.tileManager.tiles) {
+          TileView.render(tile, ctx);
+        }
+
+        this.particles.update(dt);
+        this.particles.render(ctx);
+
+        this.comboPopup.update(dt);
+        this.comboPopup.render(ctx);
+
+        if (this.engine.state === GAME_STATES.PLAYING) {
+          ScoreHUD.render(ctx, {
+            ...this.currentScoreData,
+            width: canvas.width,
+            mode: this.activeMode
+          });
+        }
+
+        requestAnimationFrame(this.loop);
+      }
+    }
+
+    window.app = new BrowserApp();
+    resize();
+  </script>
+</body>
+</html>

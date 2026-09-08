@@ -1,0 +1,16 @@
+﻿{
+  "engine": "WebAudio-Procedural",
+  "sampleRate": 44100,
+  "harmonics": [
+    { "ratio": 1.0, "amplitude": 0.70 },
+    { "ratio": 2.0, "amplitude": 0.25 },
+    { "ratio": 3.0, "amplitude": 0.12 },
+    { "ratio": 4.0, "amplitude": 0.05 }
+  ],
+  "sfx": {
+    "hitPerfect": { "type": "sine", "startHz": 880, "endHz": 1320, "durationSec": 0.2 },
+    "hitGreat": { "type": "sine", "startHz": 660, "endHz": 990, "durationSec": 0.2 },
+    "hitGood": { "type": "sine", "startHz": 520, "endHz": 780, "durationSec": 0.2 },
+    "miss": { "type": "sawtooth", "startHz": 140, "endHz": 70, "durationSec": 0.35 }
+  }
+}
